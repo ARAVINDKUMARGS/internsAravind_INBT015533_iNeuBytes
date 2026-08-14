@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: healthcare-management-system
+    env: node
+    rootDir: healthcare-management-system/backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: RENDER
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USER
+        value: aravindkumar06062006@gmail.com
+      - key: EMAIL_PASS
+        value: htvnkadxyynesvda
+      - key: EMAIL_FROM
+        value: '"Wellframe Clinic" <aravindkumar06062006@gmail.com>'
