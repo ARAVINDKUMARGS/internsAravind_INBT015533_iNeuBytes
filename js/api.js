@@ -5,7 +5,7 @@ function getApiBase() {
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.endsWith('.onrender.com')) {
     return '/api';
   }
-  return '/api';
+  return 'https://internsaravind-inbt015533-ineubytes.onrender.com/api';
 }
 
 function showBackendConfigModal(reason) {
