@@ -63,7 +63,12 @@ async function api(path, { method = 'GET', body, auth = true, raw = false } = {}
   let data = null;
   try { data = await res.json(); } catch (e) { /* no body */ }
   if (!res.ok) {
-    const err = new Error((data && data.error) || `Request failed (${res.status})`);
+    let errMsg = (data && data.error) || `Request failed (${res.status})`;
+    if (res.status === 404) {
+      errMsg = `API endpoint 404 Not Found at: ${apiBase + path}. Please verify your Render Backend URL. Click here to change API URL.`;
+      toast(errMsg, 'error');
+    }
+    const err = new Error(errMsg);
     err.status = res.status;
     throw err;
   }
