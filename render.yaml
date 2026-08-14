@@ -21,6 +21,6 @@ services:
       - key: EMAIL_USER
         value: aravindkumar06062006@gmail.com
       - key: EMAIL_PASS
-        value: htvnkadxyynesvda
+        value: ytsv abmq nhas hhbk
       - key: EMAIL_FROM
         value: '"Wellframe Clinic" <aravindkumar06062006@gmail.com>'
