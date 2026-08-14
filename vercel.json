@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://healthcare-management-system.onrender.com/api/$1" },
     { "source": "/css/(.*)", "destination": "/healthcare-management-system/frontend/css/$1" },
     { "source": "/js/(.*)", "destination": "/healthcare-management-system/frontend/js/$1" },
     { "source": "/(.*)", "destination": "/healthcare-management-system/frontend/$1" }

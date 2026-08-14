@@ -1,8 +1,6 @@
 {
-  "version": 2,
   "cleanUrls": true,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://healthcare-management-system.onrender.com/api/$1" }
   ]
 }
