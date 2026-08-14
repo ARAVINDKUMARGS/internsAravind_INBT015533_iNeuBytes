@@ -1,6 +1,6 @@
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.endsWith('.onrender.com'))
   ? '/api'
-  : 'https://hospital-management-system-2-u2ju.onrender.com/api';
+  : (window.HMS_API_URL || 'https://hospital-management-system-2-u2ju.onrender.com/api');
 
 const Auth = {
   getToken() { return localStorage.getItem('hms_token'); },
