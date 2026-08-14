@@ -99,7 +99,11 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     const dest = { admin: 'admin-dashboard.html', doctor: 'doctor-dashboard.html', patient: 'patient-dashboard.html' }[res.user.role];
     window.location.href = dest || 'index.html';
   } catch (err) {
-    msgHost.innerHTML = `<div class="form-msg error">${err.message}</div>`;
+    let extra = '';
+    if (err.isNetworkError || err.status === 404 || err.message.includes('404')) {
+      extra = `<br><button type="button" onclick="window.configureBackendUrl()" style="margin-top:8px; background:#0f766e; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">⚙️ Set Render Backend URL</button>`;
+    }
+    msgHost.innerHTML = `<div class="form-msg error">${err.message}${extra}</div>`;
     btn.disabled = false; btn.textContent = 'Log in';
   }
 });
