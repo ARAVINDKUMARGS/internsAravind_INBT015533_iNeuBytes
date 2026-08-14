@@ -8,7 +8,8 @@ function authenticate(req, res, next) {
   }
   const token = header.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const secret = process.env.JWT_SECRET || 'wellframe_secret_key_2026_dev';
+    const decoded = jwt.verify(token, secret);
     req.user = decoded; // { id, role, name, email }
     next();
   } catch (err) {

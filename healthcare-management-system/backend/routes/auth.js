@@ -210,7 +210,8 @@ router.put('/change-password', authenticate, async (req, res) => {
 });
 
 function signToken(payload) {
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
+  const secret = process.env.JWT_SECRET || 'wellframe_secret_key_2026_dev';
+  return jwt.sign(payload, secret, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
 }
 
 module.exports = router;
