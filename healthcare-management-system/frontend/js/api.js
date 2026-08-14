@@ -1,6 +1,24 @@
-const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.endsWith('.onrender.com'))
-  ? '/api'
-  : (window.HMS_API_URL || 'https://hospital-management-system-2-u2ju.onrender.com/api');
+function getApiBase() {
+  const saved = localStorage.getItem('hms_api_url');
+  if (saved) return saved.endsWith('/api') ? saved : saved.replace(/\/$/, '') + '/api';
+  if (window.HMS_API_URL) return window.HMS_API_URL.endsWith('/api') ? window.HMS_API_URL : window.HMS_API_URL.replace(/\/$/, '') + '/api';
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.endsWith('.onrender.com')) {
+    return '/api';
+  }
+  return 'https://healthcare-management-system.onrender.com/api';
+}
+
+window.configureBackendUrl = function() {
+  const current = localStorage.getItem('hms_api_url') || getApiBase();
+  const input = prompt('Enter your deployed Render Backend URL (e.g. https://healthcare-management-system.onrender.com):', current);
+  if (input && input.trim()) {
+    let clean = input.trim();
+    if (!clean.startsWith('http://') && !clean.startsWith('https://')) clean = 'https://' + clean;
+    localStorage.setItem('hms_api_url', clean);
+    alert('Backend URL saved as: ' + clean + '\nPage will now reload.');
+    window.location.reload();
+  }
+};
 
 const Auth = {
   getToken() { return localStorage.getItem('hms_token'); },
@@ -26,11 +44,21 @@ const Auth = {
 async function api(path, { method = 'GET', body, auth = true, raw = false } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (auth && Auth.getToken()) headers['Authorization'] = `Bearer ${Auth.getToken()}`;
-  const res = await fetch(API_BASE + path, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  const apiBase = getApiBase();
+  let res;
+  try {
+    res = await fetch(apiBase + path, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (netErr) {
+    console.error('API fetch error:', netErr);
+    toast('⚠️ Backend server unreachable. If hosted on Render, wait 30s for warm-up. Click here to change API URL.', 'error');
+    const err = new Error('Failed to connect to backend server. Render free tier may be spinning up, or backend URL needs update.');
+    err.isNetworkError = true;
+    throw err;
+  }
   if (raw) return res;
   let data = null;
   try { data = await res.json(); } catch (e) { /* no body */ }
@@ -51,9 +79,14 @@ function toast(message, type = 'success') {
   }
   const el = document.createElement('div');
   el.className = `toast ${type}`;
+  el.style.cursor = type === 'error' ? 'pointer' : 'default';
   el.textContent = message;
+  if (type === 'error') {
+    el.title = 'Click to configure Render Backend API URL';
+    el.onclick = () => window.configureBackendUrl();
+  }
   host.appendChild(el);
-  setTimeout(() => el.remove(), 3500);
+  setTimeout(() => el.remove(), 7000);
 }
 
 function initials(name) {
