@@ -2,7 +2,16 @@
 // If DB_HOST is provided, connects to MySQL. Otherwise, falls back to node:sqlite.
 
 const mysql = require('mysql2/promise');
-const { DatabaseSync } = require('node:sqlite');
+let DatabaseSync;
+try {
+  DatabaseSync = require('node:sqlite').DatabaseSync;
+} catch (e) {
+  try {
+    DatabaseSync = require('better-sqlite3');
+  } catch (err) {
+    console.error('SQLite module loading warning:', e.message);
+  }
+}
 const path = require('path');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
@@ -25,7 +34,11 @@ if (!isSQLite) {
   });
 } else {
   const dbFile = process.env.DB_FILE || path.join(__dirname, '..', 'healthcare.db');
-  sqliteDb = new DatabaseSync(dbFile);
+  if (DatabaseSync) {
+    sqliteDb = new DatabaseSync(dbFile);
+  } else {
+    console.error('DatabaseSync constructor unavailable');
+  }
 }
 
 // Automatically initialize schema tables if they do not exist

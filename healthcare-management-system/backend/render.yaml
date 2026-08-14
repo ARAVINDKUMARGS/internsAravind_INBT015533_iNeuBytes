@@ -7,6 +7,8 @@ services:
     envVars:
       - key: RENDER
         value: "true"
+      - key: NODE_VERSION
+        value: "22.12.0"
       - key: EMAIL_HOST
         value: smtp.gmail.com
       - key: EMAIL_PORT
