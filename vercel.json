@@ -1,9 +1,6 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://healthcare-management-system.onrender.com/api/:path*" },
-    { "source": "/css/:path*", "destination": "/healthcare-management-system/frontend/css/:path*" },
-    { "source": "/js/:path*", "destination": "/healthcare-management-system/frontend/js/:path*" },
-    { "source": "/:path*", "destination": "/healthcare-management-system/frontend/:path*" }
+    { "source": "/api/:path*", "destination": "https://healthcare-management-system.onrender.com/api/:path*" }
   ]
 }
